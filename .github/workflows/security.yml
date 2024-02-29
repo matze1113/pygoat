@@ -21,6 +21,7 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
+        if: always()
         with: 
           path: bandit_findings.json
         
