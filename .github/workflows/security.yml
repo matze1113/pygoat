@@ -16,11 +16,9 @@ jobs:
       - name: Install Bandit
         run: |
           pip install bandit
-
       - name: Run Bandit Scan
         run: |
           bandit -r . -lll -ii -f json -o bandit_findings.json
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         if: always()
@@ -34,19 +32,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-
       - name: Install docker
         run: sudo apt-get install docker -y
 
       - name: Build docker image
         run: docker image build -t pygoat-image .
 
-     
+      - name: Docker Login
+        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
+
       - name: Docker Scout Scan
         uses: docker/scout-action@v1.5.0
         with:
           dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+          dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN }}
+
 
       
 
