@@ -38,9 +38,17 @@ jobs:
         run: sudo apt-get install docker -y
 
       - name: Build docker image
-        run: docker image build -t pygoat-image . 
-     
-        
+        run: docker image build -t pygoat-image .
+
+      - name: Docker Login
+        run: echo ${{ secrets.DOCKERHUB-TOKEN }} | docker login -u ${{ secrets.DOCKERHUB-USER }} --password-stdin
+
+      - name: Docker Scout Scan
+        uses: docker/scout-action@v1.5.0
+        with:
+          dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+
       
 
     
